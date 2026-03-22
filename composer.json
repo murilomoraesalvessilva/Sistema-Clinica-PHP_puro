@@ -1,0 +1,16 @@
+{
+    "name": "murilo/hospital",
+    "description": "projeto utilizando o cenario de um hospital em php",
+    "type": "project",
+    "require": {
+        "doctrine/dbal": "^4.4",
+        "illuminate/database": "^12.54"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "murilo"
+        }
+    ],
+    "minimum-stability": "stable"
+}
