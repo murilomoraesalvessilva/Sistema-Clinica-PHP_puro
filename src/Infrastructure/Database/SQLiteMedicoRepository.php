@@ -7,7 +7,7 @@ use App\Domain\Medico\MedicoRepositoryInterface;
 
 class SQLiteMedicoRepository implements MedicoRepositoryInterface {
 
-    public function __construct(private PDO $pdo) {}
+    public function __construct(private \PDO $pdo) {}
 
     public function salvar(Medico $medico): void {
         $stmt = $this->pdo->prepare("
@@ -28,7 +28,7 @@ class SQLiteMedicoRepository implements MedicoRepositoryInterface {
         ");
 
         $stmt->execute([':id' => $id]);
-        $dados = $stmt->fetch(PDO::FETCH_ASSOC);
+        $dados = $stmt->fetch(\PDO::FETCH_ASSOC);
 
         if (!$dados) {
             return null;
@@ -45,7 +45,7 @@ class SQLiteMedicoRepository implements MedicoRepositoryInterface {
         $stmt = $this->pdo->query("SELECT * FROM medicos");
         $medicos = [];
 
-        foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $dados) {
+        foreach ($stmt->fetchAll(\PDO::FETCH_ASSOC) as $dados) {
             $medicos[] = new Medico(
                 $dados['nome'],
                 $dados['crm'],

@@ -44,6 +44,10 @@ class Paciente {
         return $resultado;
     }
 
+    public function getTelefonesRaw(): array {
+        return $this->telefones;
+    }
+
     public function getDataNascimento(): string {
         return $this->dataNascimento;
     }
