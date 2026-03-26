@@ -61,9 +61,18 @@ class SQLitePacienteRepository implements PacienteRepositoryInterface {
 
     public function deletar(int $id): void {
         $stmt = $this->pdo->prepare("
-            DELETE FROM pacientes WHERE id = :id
+            UPDATE pacientes SET deletado_em = :data WHERE id = :id
         ");
 
-        $stmt->execute([':id' => $id]);
+        $stmt->execute([
+            ':data' => date('Y-m-d H:i:s'),
+            ':id' => $id
+            ]);
+    }
+
+    public function recuperar(int $id): void {
+        $stmt = $this->pdo->prepare("
+        UPDATE pacientes SET deletado_em = NULL WHERE id = :id
+        ");
     }
 }

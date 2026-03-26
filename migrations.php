@@ -22,6 +22,7 @@ $pdo->exec("CREATE TABLE IF NOT EXISTS pacientes (
     cpf TEXT NOT NULL,
     telefones TEXT NOT NULL,
     data_nascimento TEXT NOT NULL
+    deletado_em TEXT DEFAULT NULL
 )");
 echo "Tabela pacientes criada!" . PHP_EOL;
 
