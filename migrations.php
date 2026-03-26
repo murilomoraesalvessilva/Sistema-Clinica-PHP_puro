@@ -21,7 +21,7 @@ $pdo->exec("CREATE TABLE IF NOT EXISTS pacientes (
     nome TEXT NOT NULL,
     cpf TEXT NOT NULL,
     telefones TEXT NOT NULL,
-    data_nascimento TEXT NOT NULL
+    data_nascimento TEXT NOT NULL,
     deletado_em TEXT DEFAULT NULL
 )");
 echo "Tabela pacientes criada!" . PHP_EOL;
@@ -31,6 +31,8 @@ $pdo->exec("CREATE TABLE IF NOT EXISTS consultas (
     medico_id INTEGER NOT NULL,
     paciente_id INTEGER NOT NULL,
     data TEXT NOT NULL,
-    horario TEXT NOT NULL
+    horario TEXT NOT NULL,
+    deletado_em TEXT DEFAULT NULL,
+    status TEXT DEFAULT 'agendada'
 )");
 echo "Tabela consultas criada!" . PHP_EOL;

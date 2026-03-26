@@ -68,8 +68,10 @@ class SQLiteConsultaRepository implements ConsultaRepositoryInterface {
     public function listarTodos(): array {
         $stmt = $this->pdo->query("
             SELECT
+                consultas.id,
                 consultas.data,
                 consultas.horario,
+                consultas.status,
                 medicos.nome AS medico_nome,
                 medicos.crm AS medico_crm,
                 medicos.especialidade AS medico_especialidade,
@@ -80,6 +82,7 @@ class SQLiteConsultaRepository implements ConsultaRepositoryInterface {
             FROM consultas
             INNER JOIN medicos ON consultas.medico_id = medicos.id
             INNER JOIN pacientes ON consultas.paciente_id = pacientes.id
+            WHERE consultas.deletado_em IS NULL
         ");
 
         $consultas = [];
@@ -92,7 +95,24 @@ class SQLiteConsultaRepository implements ConsultaRepositoryInterface {
 
     public function deletar(int $id): void {
         $stmt = $this->pdo->prepare("
-            DELETE FROM consultas WHERE id = :id
+        UPDATE consultas SET deletado_em = :data WHERE id = :id
+        ");
+        $stmt->execute([
+                ':data' => date('Y-m-d H:i:s'),
+                ':id' => $id
+            ]);
+    }
+
+    public function concluir(int $id): void {
+        $stmt = $this->pdo->prepare("
+            UPDATE consultas SET status = 'concluida' WHERE id = :id
+        ");
+        $stmt->execute([':id' => $id]);
+    }
+
+    public function cancelar(int $id): void {
+        $stmt = $this->pdo->prepare("
+            UPDATE consultas SET status = 'cancelada' WHERE id = :id
         ");
         $stmt->execute([':id' => $id]);
     }
@@ -111,6 +131,12 @@ class SQLiteConsultaRepository implements ConsultaRepositoryInterface {
             $dados['paciente_data_nascimento']
         );
 
-        return new Consulta($medico, $paciente, $dados['data'], $dados['horario']);
+        return new Consulta(
+            $medico,
+            $paciente,
+            $dados['data'],
+            $dados['horario'],
+            $dados['status']
+        );
     }
 }
