@@ -11,7 +11,8 @@ $pdo->exec("CREATE TABLE IF NOT EXISTS medicos (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     nome TEXT NOT NULL,
     crm TEXT NOT NULL,
-    especialidade TEXT NOT NULL
+    especialidade TEXT NOT NULL,
+    deletado_em TEXT DEFAULT NULL
 )");
 echo "Tabela médicos criada!" . PHP_EOL;
 

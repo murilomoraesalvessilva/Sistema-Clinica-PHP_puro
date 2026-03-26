@@ -42,7 +42,9 @@ class SQLiteMedicoRepository implements MedicoRepositoryInterface {
     }
 
     public function listarTodos(): array {
-        $stmt = $this->pdo->query("SELECT * FROM medicos");
+        $stmt = $this->pdo->query("
+        SELECT * FROM medicos WHERE deletado_em IS NULL
+        ");
         $medicos = [];
 
         foreach ($stmt->fetchAll(\PDO::FETCH_ASSOC) as $dados) {
@@ -58,9 +60,19 @@ class SQLiteMedicoRepository implements MedicoRepositoryInterface {
 
     public function deletar(int $id): void {
         $stmt = $this->pdo->prepare("
-            DELETE FROM medicos WHERE id = :id
+            UPDATE medicos SET deletado_em = :data WHERE id = :id
         ");
 
+        $stmt->execute([
+            ':data' => date('Y-m-d H:i:s'),
+            ':id' => $id
+            ]);
+    }
+
+    public function recuperar(int $id): void {
+        $stmt = $this->pdo->prepare("
+        UPDATE medicos SET deletado_em = NULL WHERE id = :id
+        ");
         $stmt->execute([':id' => $id]);
     }
 }
